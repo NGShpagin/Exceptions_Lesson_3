@@ -86,8 +86,6 @@ public class Ex_1 {
 //                fw.append(String.format("%s: %s\n", key, value));
 //            }
             fw.append("\n");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 }
