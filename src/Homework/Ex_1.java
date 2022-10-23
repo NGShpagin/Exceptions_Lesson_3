@@ -6,7 +6,11 @@ import java.util.*;
 public class Ex_1 {
     public static void main(String[] args) {
         HashMap<String, String> data = getUserData();
-        writeFile(data);
+        try {
+            writeFile(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static HashMap<String, String> getUserData() {
@@ -21,7 +25,6 @@ public class Ex_1 {
         String[] str = sb.toString().split(" ");
         if (str.length != 6)
             throw new MyElementQuantityException("Elements quantity must be 6. You enter " + str.length);
-        System.out.println(Arrays.toString(str));
         for (String elem : str) {
             if (Objects.equals(elem.toLowerCase(), "f") || Objects.equals(elem.toLowerCase(), "m"))
                 data.put("Male", elem.toLowerCase());
@@ -42,7 +45,7 @@ public class Ex_1 {
                     throw new MyDateFormatException("Date format must be numerical");
                 }
             } else if (elem.matches("[0-9]+")) {
-                if (elem.length() == 11 && elem.startsWith("7")) data.put("TelNum", elem);
+                if (elem.length() == 11 && elem.startsWith("7")) data.put("MobTelNum", elem);
                 else throw new MyTelNumberFormatException("TelNumber format must be 7XXXXXXXXXX");
             } else if (elem.toLowerCase().endsWith("vich") || elem.toLowerCase().endsWith("vna") ||
                     elem.toLowerCase().endsWith("вич") || elem.toLowerCase().endsWith("вна"))
@@ -58,21 +61,33 @@ public class Ex_1 {
                 else data.put("FirstName", elem);
             }
         }
-        System.out.println(data);
         return data;
     }
 
-    static void writeFile(HashMap<String, String> hm) {
-        try (FileWriter fw = new FileWriter("/Users/nikolaishpagin/Desktop/GeekBrains/Programmer_1st_quarter/Exceptions/Lesson_3/src/Homework/contacts.txt", true)) {
-            if (!hm.isEmpty()) fw.append("\n");
-            for (Map.Entry<String, String> el : hm.entrySet()) {
-                String key = el.getKey();
-                String value = el.getValue();
-                fw.append(String.format("%s: %s\n", key, value));
-            }
+    static void writeFile(HashMap<String, String> hm) throws IOException {
+        File file = new File(String.format("/Users/nikolaishpagin/Desktop/GeekBrains/Programmer_1st_quarter/Exceptions/Lesson_3/src/Homework/%s", hm.get("LastName")));
+        if (file.createNewFile()){
+            System.out.printf("File %s is created!\n", file.getName());
+        }
+        else{
+            System.out.printf("File %s already exists and new contact add in it.\n", file.getName());
+        }
+        try (FileWriter fw = new FileWriter(String.format("/Users/nikolaishpagin/Desktop/GeekBrains/Programmer_1st_quarter/Exceptions/Lesson_3/src/Homework/%s", hm.get("LastName")), true)) {
+            fw.append(String.format("LastName: %s\n", hm.get("LastName")));
+            fw.append(String.format("FirstName: %s\n", hm.get("FirstName")));
+            fw.append(String.format("MiddleName: %s\n", hm.get("MiddleName")));
+            fw.append(String.format("BirthDate: %s\n", hm.get("BirthDate")));
+            fw.append(String.format("MobTelNum: %s\n", hm.get("MobTelNum")));
+            fw.append(String.format("Male: %s\n", hm.get("Male")));
+
+//            for (Map.Entry<String, String> el : hm.entrySet()) {
+//                String key = el.getKey();
+//                String value = el.getValue();
+//                fw.append(String.format("%s: %s\n", key, value));
+//            }
+            fw.append("\n");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
 }
