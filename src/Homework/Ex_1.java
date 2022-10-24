@@ -5,10 +5,11 @@ import java.util.*;
 
 public class Ex_1 {
     public static void main(String[] args) {
-        HashMap<String, String> data = getUserData();
         try {
+            HashMap<String, String> data = getUserData();
             writeFile(data);
-        } catch (IOException e) {
+        } catch (IOException | MyElementQuantityException | MyDateFormatException | MyTelNumberFormatException |
+                 MyNotIdentifyElementException e) {
             e.printStackTrace();
         }
     }
@@ -66,10 +67,9 @@ public class Ex_1 {
 
     static void writeFile(HashMap<String, String> hm) throws IOException {
         File file = new File(String.format("/Users/nikolaishpagin/Desktop/GeekBrains/Programmer_1st_quarter/Exceptions/Lesson_3/src/Homework/%s", hm.get("LastName")));
-        if (file.createNewFile()){
+        if (file.createNewFile()) {
             System.out.printf("File %s is created!\n", file.getName());
-        }
-        else{
+        } else {
             System.out.printf("File %s already exists and new contact add in it.\n", file.getName());
         }
         try (FileWriter fw = new FileWriter(String.format("/Users/nikolaishpagin/Desktop/GeekBrains/Programmer_1st_quarter/Exceptions/Lesson_3/src/Homework/%s", hm.get("LastName")), true)) {
